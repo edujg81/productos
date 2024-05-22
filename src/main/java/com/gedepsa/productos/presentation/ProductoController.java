@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -23,9 +24,22 @@ public class ProductoController {
 	@Autowired
 	private ProductoServices productoServices;
 	
+	// http://localhost:8080/productos
+	// http://localhost:8080/productos?min=20.0&max=500.0
+	
 	@GetMapping("/productos")
-	public List<Producto> getProductos(){
-		return productoServices.getAll();
+	public List<Producto> getProductos(@RequestParam(required=false) Double min, 
+									   @RequestParam(required=false) Double max){
+		
+		List<Producto> productos = null;
+		
+		if(min != null && max != null) {
+			productos = productoServices.getByPrecioBetween(min, max);
+		} else {
+			productos = productoServices.getAll();
+		}
+		
+		return productos;
 	}
 		
 	@GetMapping("/productos/{codigo}")

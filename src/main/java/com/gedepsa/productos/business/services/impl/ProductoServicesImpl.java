@@ -77,8 +77,7 @@ public class ProductoServicesImpl implements ProductoServices{
 
 	@Override
 	public List<Producto> getByPrecioBetween(double min, double max) {
-		// TODO
-		return null;
+		return productoRepository.findByPrecioBetweenOrderByPrecio(min, max);
 	}
 
 	@Override
