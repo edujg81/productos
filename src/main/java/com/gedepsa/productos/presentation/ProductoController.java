@@ -27,7 +27,7 @@ public class ProductoController {
 	public List<Producto> getProductos(){
 		return productoServices.getAll();
 	}
-	
+		
 	@GetMapping("/productos/{codigo}")
 	public ResponseEntity<?> read(@PathVariable Long codigo) {
 		
@@ -35,9 +35,11 @@ public class ProductoController {
 		
 		if(optional.isEmpty()) {
 			
+			CustomHttpErrorMessage respuesta = new CustomHttpErrorMessage("NO EXISTE EL PRODUCTO " + codigo);
+			
 			return ResponseEntity
 					.status(HttpStatus.NOT_FOUND)
-					.body(new CustomHttpErrorMessage("NO EXISTE EL PRODUCTO " + codigo));
+					.body(respuesta);
 		}
 		
 		return ResponseEntity.ok(optional.get());
@@ -46,13 +48,20 @@ public class ProductoController {
 	@PostMapping("/productos")
 	public ResponseEntity<?> create(@RequestBody Producto producto, UriComponentsBuilder ucb) {
 		
-		Long codigo = productoServices.create(producto);
+		Long codigo = null;
 		
+		try {
+			codigo = productoServices.create(producto);
+		} catch(IllegalStateException e) {
+			CustomHttpErrorMessage respuesta = new CustomHttpErrorMessage(e.getMessage());
+			return ResponseEntity
+					.status(HttpStatus.BAD_REQUEST)
+					.body(respuesta);
+		}
+				
 		URI uri = ucb.path("/productos/{codigo}").build(codigo);
 		
-		return ResponseEntity.created(uri).build();
-		
-		
+		return ResponseEntity.created(uri).build();	
 	}
 	
 }

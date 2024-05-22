@@ -23,8 +23,6 @@ public interface ProductoServices {
 	 * 
 	 * Si el producto no existe lanza IllegalStateException
 	 * 
-	 * <h1 style="color:red;">SOY UN HEADER</h1>
-	 * 
 	 */
 	void update(Producto producto);
 	
