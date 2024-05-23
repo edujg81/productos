@@ -1,5 +1,6 @@
 package com.gedepsa.productos.business.services.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.gedepsa.productos.business.model.Familia;
 import com.gedepsa.productos.business.model.Producto;
+import com.gedepsa.productos.business.model.dtos.ProductoDTO1;
 import com.gedepsa.productos.business.services.ProductoServices;
 import com.gedepsa.productos.integration.repositories.ProductoRepository;
 
@@ -84,4 +86,36 @@ public class ProductoServicesImpl implements ProductoServices{
 	public List<Producto> getByFamilia(Familia familia) {
 		return productoRepository.findByFamilia(familia);
 	}
+
+/*	
+	@Override
+	public List<ProductoDTO1> getProductosDTO1() {
+		
+		List<Object[]> resultados = productoRepository.findProductoDTO1();
+		
+		List<ProductoDTO1> productosDTO1 = new ArrayList<>();
+		
+		for(Object[] fila: resultados) {	
+			productosDTO1.add(new ProductoDTO1((String) fila[0], (Double) fila[1]));
+		}
+		
+		return productosDTO1;
+	}
+*/
+	
+	@Override
+	public List<ProductoDTO1> getProductosDTO1() {
+		return productoRepository.findProductoDTO1();
+	}
+	
 }
+
+
+
+
+
+
+
+
+
+
