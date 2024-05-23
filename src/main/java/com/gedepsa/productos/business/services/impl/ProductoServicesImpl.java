@@ -1,6 +1,5 @@
 package com.gedepsa.productos.business.services.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.gedepsa.productos.business.model.Familia;
 import com.gedepsa.productos.business.model.Producto;
 import com.gedepsa.productos.business.model.dtos.ProductoDTO1;
+import com.gedepsa.productos.business.model.dtos.ProductoDTO2;
 import com.gedepsa.productos.business.services.ProductoServices;
 import com.gedepsa.productos.integration.repositories.ProductoRepository;
 
@@ -106,6 +106,12 @@ public class ProductoServicesImpl implements ProductoServices{
 	@Override
 	public List<ProductoDTO1> getProductosDTO1() {
 		return productoRepository.findProductoDTO1();
+	}
+
+	@Override
+	public List<ProductoDTO2> getProductosDTO2() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

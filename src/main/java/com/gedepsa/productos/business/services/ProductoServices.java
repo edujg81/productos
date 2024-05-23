@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.gedepsa.productos.business.model.Familia;
 import com.gedepsa.productos.business.model.Producto;
 import com.gedepsa.productos.business.model.dtos.ProductoDTO1;
+import com.gedepsa.productos.business.model.dtos.ProductoDTO2;
 
 public interface ProductoServices {
 
@@ -45,6 +46,8 @@ public interface ProductoServices {
 	List<Producto> getByFamilia(Familia familia);
 	
 	List<ProductoDTO1> getProductosDTO1();
+	
+	List<ProductoDTO2> getProductosDTO2();
 	
 	
 }
