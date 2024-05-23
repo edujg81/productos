@@ -82,7 +82,6 @@ public class ProductoServicesImpl implements ProductoServices{
 
 	@Override
 	public List<Producto> getByFamilia(Familia familia) {
-		// TODO
-		return null;
+		return productoRepository.findByFamilia(familia);
 	}
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.gedepsa.productos.business.model.Familia;
 import com.gedepsa.productos.business.model.Producto;
 import com.gedepsa.productos.business.services.ProductoServices;
 
@@ -26,17 +27,26 @@ public class ProductoController {
 	
 	// http://localhost:8080/productos
 	// http://localhost:8080/productos?min=20.0&max=500.0
+	// http://localhost:8080/productos?familia=HARDWARE
 	
 	@GetMapping("/productos")
 	public List<Producto> getProductos(@RequestParam(required=false) Double min, 
-									   @RequestParam(required=false) Double max){
+									   @RequestParam(required=false) Double max,
+									   @RequestParam(value="familia", required=false) String strFamilia){
 		
 		List<Producto> productos = null;
 		
-		if(min != null && max != null) {
-			productos = productoServices.getByPrecioBetween(min, max);
+		if(strFamilia != null) {
+			Familia familia = Familia.valueOf(strFamilia.toUpperCase());
+			productos = productoServices.getByFamilia(familia);
+			
 		} else {
-			productos = productoServices.getAll();
+		
+			if(min != null && max != null) {
+				productos = productoServices.getByPrecioBetween(min, max);
+			} else {
+				productos = productoServices.getAll();
+			}
 		}
 		
 		return productos;
