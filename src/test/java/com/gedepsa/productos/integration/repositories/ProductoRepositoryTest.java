@@ -2,6 +2,7 @@ package com.gedepsa.productos.integration.repositories;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,6 +14,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 import com.gedepsa.productos.business.model.Familia;
 import com.gedepsa.productos.business.model.Producto;
+import com.gedepsa.productos.business.model.dtos.ProductoDTO2;
 
 @DataJpaTest
 @Sql(scripts= {"/data/h2/schema.sql","/data/h2/data.sql"})
@@ -82,4 +84,36 @@ public class ProductoRepositoryTest {
 		
 	}
 	
+	@Test
+	void findProductoDTO2Test() {
+		
+		List<ProductoDTO2> productosDTO2 = productoRepository.findProductoDTO2();
+		
+		assertEquals(8, productosDTO2.size());
+		
+		boolean encuentra1 = false;
+		boolean encuentra2 = false;
+		boolean encuentra3 = false;
+		
+		for(ProductoDTO2 productoDTO2: productosDTO2) {
+			
+			String nombre = productoDTO2.getProducto();
+			
+			if(nombre.equals("PRODUCTO4 Descripción lar...")) {
+				encuentra1 = true;
+			}
+			
+			if(nombre.equals("PRODUCTO5 Descripción5 (*)")) {
+				encuentra2 = true;
+			}
+			
+			if(nombre.equals("PRODUCTO3 Descripción3")) {
+				encuentra3 = true;
+			}		
+		}
+
+		assertTrue(encuentra1 && encuentra2 && encuentra3);
+		
+	}
+		
 }

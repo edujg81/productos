@@ -110,18 +110,7 @@ public class ProductoServicesImpl implements ProductoServices{
 
 	@Override
 	public List<ProductoDTO2> getProductosDTO2() {
-		// TODO Auto-generated method stub
-		return null;
+		return productoRepository.findProductoDTO2();
 	}
 	
 }
-
-
-
-
-
-
-
-
-
-
