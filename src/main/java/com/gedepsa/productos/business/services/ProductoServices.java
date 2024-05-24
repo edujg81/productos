@@ -34,6 +34,8 @@ public interface ProductoServices {
 	 */
 	void delete(Long codigo);
 	
+	boolean exists(Long codigo);
+	
 	List<Producto> getAll();
 	
 	/**

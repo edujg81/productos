@@ -71,6 +71,11 @@ public class ProductoServicesImpl implements ProductoServices{
 		productoRepository.deleteById(codigo);
 		
 	}
+	
+	@Override
+	public boolean exists(Long codigo) {
+		return productoRepository.existsById(codigo);
+	}
 
 	@Override
 	public List<Producto> getAll() {

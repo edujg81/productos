@@ -1,4 +1,4 @@
-package com.gedepsa.productos.presentation;
+package com.gedepsa.productos.presentation.pruebas;
 
 import java.util.Optional;
 
@@ -13,7 +13,7 @@ import com.gedepsa.productos.integration.repositories.ProductoRepository;
 import jakarta.transaction.Transactional;
 
 @RestController
-public class BorrameController {
+public class PruebasController {
 
 	@Autowired
 	private ProductoRepository productoRepository;
