@@ -1,4 +1,4 @@
-package com.gedepsa.productos.presentation;
+package com.gedepsa.productos.presentation.config;
 
 public class CustomHttpErrorMessage {
 

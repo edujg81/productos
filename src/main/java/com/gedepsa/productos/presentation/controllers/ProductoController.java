@@ -1,4 +1,4 @@
-package com.gedepsa.productos.presentation;
+package com.gedepsa.productos.presentation.controllers;
 
 import java.net.URI;
 import java.util.List;
@@ -21,6 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.gedepsa.productos.business.model.Familia;
 import com.gedepsa.productos.business.model.Producto;
 import com.gedepsa.productos.business.services.ProductoServices;
+import com.gedepsa.productos.presentation.config.CustomHttpErrorMessage;
 
 @RestController
 @RequestMapping("/productos")
