@@ -3,6 +3,7 @@ package com.gedepsa.productos.integration.repositories;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import com.gedepsa.productos.business.model.Familia;
@@ -18,7 +19,6 @@ public interface ProductoRepository extends JpaRepository<Producto, Long>{
 	
 	List<Producto> findByPrecioGreaterThan(double precio);
 
-	
 	@Query("SELECT CONCAT(UPPER(p.nombre), ' [',p.familia,']'), p.precio FROM Producto p")
 	List<Object[]> findProductoDTO1Precocinado();
 	
@@ -34,4 +34,24 @@ public interface ProductoRepository extends JpaRepository<Producto, Long>{
 			
 			+ "FROM Producto p")
 	List<ProductoDTO2> findProductoDTO2();
+	
+	@Query("UPDATE Producto p SET p.precio = p.precio - (p.precio * :descuento / 100) WHERE p.descatalogado IS TRUE")
+	@Modifying
+	int aplicarDescuento(double descuento);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
