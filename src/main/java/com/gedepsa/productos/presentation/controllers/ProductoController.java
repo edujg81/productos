@@ -1,10 +1,8 @@
 package com.gedepsa.productos.presentation.controllers;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,110 +13,94 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.gedepsa.productos.business.model.Familia;
-import com.gedepsa.productos.business.model.Producto;
 import com.gedepsa.productos.business.services.ProductoServices;
-import com.gedepsa.productos.presentation.config.CustomHttpErrorMessage;
+import com.gedepsa.productos.business.services.model.Producto;
+import com.gedepsa.productos.presentation.config.PresentationException;
+import com.gedepsa.productos.rabbitmq.Publisher;
 
 @RestController
 @RequestMapping("/productos")
 public class ProductoController {
-
-	@Autowired
+	
 	private ProductoServices productoServices;
+	private Publisher publisher;
 	
-	// http://localhost:8080/productos
-	// http://localhost:8080/productos?min=20.0&max=500.0
-	// http://localhost:8080/productos?familia=HARDWARE
-	
+	public ProductoController(Publisher publisher, ProductoServices productoServices) {
+		this.productoServices = productoServices;
+		this.publisher = publisher;
+	}
+		
 	@GetMapping
-	public List<Producto> getProductos(@RequestParam(required=false) Double min, 
-									   @RequestParam(required=false) Double max,
-									   @RequestParam(value="familia", required=false) String strFamilia){
+	public List<Producto> getAll(@RequestParam(required = false) Double min, 
+			                     @RequestParam(required = false) Double max){
 		
-		List<Producto> productos = null;
+		List<Producto> productos;
 		
-		if(strFamilia != null) {
-			Familia familia = Familia.valueOf(strFamilia.toUpperCase());
-			productos = productoServices.getByFamilia(familia);
-			
+		if(min != null & max != null) {
+			productos = productoServices.getBetweenPriceRange(min, max);
 		} else {
-		
-			if(min != null && max != null) {
-				productos = productoServices.getByPrecioBetween(min, max);
-			} else {
-				productos = productoServices.getAll();
-			}
+			productos = productoServices.getAll();
 		}
 		
 		return productos;
 	}
-		
-	// http://localhost:8080/productos/1
 	
 	@GetMapping("/{codigo}")
-	public ResponseEntity<?> read(@PathVariable Long codigo) {
+	public Producto getByCodigo(@PathVariable Long codigo) {
 		
 		Optional<Producto> optional = productoServices.read(codigo);
 		
-		if(optional.isEmpty()) {
-			
-			CustomHttpErrorMessage respuesta = new CustomHttpErrorMessage("NO EXISTE EL PRODUCTO " + codigo);
-			
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(respuesta);
+		if(optional.isEmpty()) {	 
+			throw new PresentationException("No existe el producto con código [" + codigo + "]", HttpStatus.NOT_FOUND);
 		}
 		
-		return ResponseEntity.ok(optional.get());
+		return optional.get();
 	}
-	
+
 	@PostMapping
-	public ResponseEntity<?> create(@RequestBody Producto producto, UriComponentsBuilder ucb) {
-			
-		Long codigo = null;
+	public ResponseEntity<Object> create(@RequestBody Producto producto, UriComponentsBuilder ucb) {
+		
+		Long nuevoCodigo = null;
 		
 		try {
-			codigo = productoServices.create(producto);
+			nuevoCodigo = productoServices.create(producto);
+			
+			publisher.send("Se ha creado el producto [" + nuevoCodigo + "] de la categoria [" + producto.getCategoria().getId() + "]");
+			
 		} catch(IllegalStateException e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CustomHttpErrorMessage(e.getMessage()));
+			throw new PresentationException(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
-				
-		URI uri = ucb.path("/productos/{codigo}").build(codigo);
-		
-		return ResponseEntity.created(uri).build();	
+			
+		return ResponseEntity.created(ucb.path("/productos/{codigo}").build(nuevoCodigo))
+								.build();
 	}
 	
 	@PutMapping("/{codigo}")
-	public ResponseEntity<?> update(@RequestBody Producto producto, @PathVariable Long codigo) {
-		
-		boolean existe = productoServices.exists(codigo);
-		
-		if(!existe) {
-			
-			String mensaje = "No se encuentra el producto [" + codigo + "]";
-			
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new CustomHttpErrorMessage(mensaje));
-		}
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void update(@RequestBody Producto producto, @PathVariable Long codigo) {
 		
 		producto.setCodigo(codigo);
 		
-		productoServices.update(producto);
-		
-		return ResponseEntity.noContent().build();
+		try {
+			productoServices.update(producto);
+		} catch(IllegalStateException e) {
+			throw new PresentationException(e.getMessage(), HttpStatus.NOT_FOUND);
+		}
 	}
 	
 	@DeleteMapping("/{codigo}")
-	public ResponseEntity<?> delete(@PathVariable Long codigo){
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void delete(@PathVariable Long codigo) {
 		
 		try {
 			productoServices.delete(codigo);
 		} catch(IllegalStateException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new CustomHttpErrorMessage(e.getMessage()));
+			throw new PresentationException(e.getMessage(), HttpStatus.NOT_FOUND);
 		}
-		
-		return ResponseEntity.noContent().build();
 	}
-	
+		
 }
