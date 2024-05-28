@@ -69,7 +69,7 @@ public class ProductoController {
 		try {
 			nuevoCodigo = productoServices.create(producto);
 			
-			publisher.send("Se ha creado el producto [" + nuevoCodigo + "] de la categoria [" + producto.getCategoria().getId() + "]");
+			publisher.send("Se ha creado el producto [" + nuevoCodigo + "] de la categoria [" + (producto.getCategoria()).getId() + "]");
 			
 		} catch(IllegalStateException e) {
 			throw new PresentationException(e.getMessage(), HttpStatus.BAD_REQUEST);

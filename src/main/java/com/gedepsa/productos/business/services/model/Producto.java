@@ -23,6 +23,8 @@ import lombok.ToString;
 @Table(name="PRODUCTOS")
 public class Producto implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	private Long codigo;
 	
@@ -39,5 +41,48 @@ public class Producto implements Serializable {
 	private Categoria categoria;
 	
 	private boolean descatalogado;
-	
+
+	public Categoria getCategoria() {
+		return this.categoria;
+	}
+
+	public Long getCodigo() {
+		return this.codigo;
+	}
+
+	public void setCodigo(Long codigo) {
+		this.codigo = codigo;
+	}
+
+	public boolean getDescatalogado() {
+		return descatalogado;
+	}
+
+	public void setDescatalogado(boolean descatalogado) {
+		this.descatalogado = descatalogado;
+	}
+
+	public double getPrecio() {
+		return precio;
+	}
+
+	public void setPrecio(double precio) {
+		this.precio = precio;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+//	public void setNombre(String nombre) {
+//		this.nombre = nombre;
+//	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
 }
