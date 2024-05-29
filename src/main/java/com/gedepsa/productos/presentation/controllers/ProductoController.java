@@ -20,18 +20,15 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.gedepsa.productos.business.services.ProductoServices;
 import com.gedepsa.productos.business.services.model.Producto;
 import com.gedepsa.productos.presentation.config.PresentationException;
-import com.gedepsa.productos.rabbitmq.Publisher;
 
 @RestController
 @RequestMapping("/productos")
 public class ProductoController {
 	
 	private ProductoServices productoServices;
-	private Publisher publisher;
 	
-	public ProductoController(Publisher publisher, ProductoServices productoServices) {
+	public ProductoController(ProductoServices productoServices) {
 		this.productoServices = productoServices;
-		this.publisher = publisher;
 	}
 		
 	@GetMapping
@@ -68,9 +65,6 @@ public class ProductoController {
 		
 		try {
 			nuevoCodigo = productoServices.create(producto);
-			
-			publisher.send("Se ha creado el producto [" + nuevoCodigo + "] de la categoria [" + producto.getCategoria().getId() + "]");
-			
 		} catch(IllegalStateException e) {
 			throw new PresentationException(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
