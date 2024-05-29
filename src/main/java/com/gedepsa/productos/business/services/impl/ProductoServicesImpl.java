@@ -1,6 +1,7 @@
 package com.gedepsa.productos.business.services.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -113,26 +114,34 @@ public class ProductoServicesImpl implements ProductoServices {
 	}
 
 	@Override
+	@Transactional
 	public void variarPrecio(List<Producto> productos, double porcentaje) {
-		// TODO Auto-generated method stub
-		
+		productoRepository.variarPrecio(productos, porcentaje);
 	}
 
 	@Override
+	@Transactional
 	public void variarPrecio(long[] codigos, double porcentaje) {
-		// TODO Auto-generated method stub
-		
+		productoRepository.variarPrecio(codigos, porcentaje);
 	}
 
 	@Override
-	public Map<Categoria, Integer> getEstadisticaNumeroProductoPorCategoria() {
-		// TODO Auto-generated method stub
-		return null;
+	public Map<String, Integer> getEstadisticaNumeroProductoPorCategoria() {
+			
+		Map<String, Integer> estadistica = new HashMap<>();
+		
+		for(Object[] fila: productoRepository.getEstadisticaNumeroProductoPorCategoria()) {
+			String nombreCategoria = (String) fila[0];
+			Integer numeroProductos = ((Long) fila[1]).intValue();
+			estadistica.put(nombreCategoria, numeroProductos);
+		}
+		
+		return estadistica;
 	}
 	
 	@Override
-	public Map<Categoria, Double> getEstadisticaPrecioMedioProductosPorCategoria() {
-		// TODO Auto-generated method stub
+	public Map<String, Double> getEstadisticaPrecioMedioProductosPorCategoria() {
+		// TODO
 		return null;
 	}
 	

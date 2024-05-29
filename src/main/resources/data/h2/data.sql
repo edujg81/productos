@@ -13,7 +13,7 @@ INSERT INTO CATEGORIAS (ID, NAME) VALUES
 (12, 'ZUMO');
 
 INSERT INTO PRODUCTOS (CODIGO, NOMBRE, DESCRIPCION, FECHA_ALTA, PRECIO, DESCATALOGADO, ID_CATEGORIA) VALUES
-(100,'Patatas Bravas', 'Deliciosas patatas bravas de verdad', '2017-10-21', 6.0, FALSE, 4),
+(100,'Patatas Bravas', 'Deliciosas patatas bravas de verdad', '2017-10-21', 10.0, FALSE, 4),
 (101,'Patatas Bravas XXL', 'Deliciosas patatas bravas de verdad King Size', '2017-10-23', 9.0, FALSE, 4),
 (102,'Cerveza Moritz 33cl', 'La cerveza oficial de Barcelona', '2017-10-21', 3.0, FALSE, 3),
 (103,'Cerveza Estrella Galicia 33cl', 'Cerveza del Norte!', '2017-10-21', 3.0, FALSE, 3),
