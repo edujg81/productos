@@ -1,4 +1,4 @@
-package com.gedepsa.productos.business.services.impl;
+package com.gedepsa.productos.business.services.dummy.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,11 +14,11 @@ import com.gedepsa.productos.business.services.model.Direccion;
 import com.gedepsa.productos.business.services.model.Establecimiento;
 
 @Service
-public class EstablecimientoServicesImpl implements EstablecimientoServices {
+public class EstablecimientoServicesDummyImpl implements EstablecimientoServices {
 
 	private final Map<Long, Establecimiento> ESTABLECIMIENTOS = new HashMap<>();
 	
-	public EstablecimientoServicesImpl() {
+	public EstablecimientoServicesDummyImpl() {
 		init();
 	}
 	

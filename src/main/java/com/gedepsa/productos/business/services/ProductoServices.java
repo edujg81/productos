@@ -79,7 +79,7 @@ public interface ProductoServices {
 	 * LICORES                       5
 	 * ...
 	 */
-	Map<Categoria, Integer> getEstadisticaNumeroProductoPorCategoria();
+	Map<String, Integer> getEstadisticaNumeroProductoPorCategoria();
 	
 	/**
 	 * Nos devuelve un mapa con la informacion del precio medio de los productos de cada categoria
@@ -91,7 +91,7 @@ public interface ProductoServices {
 	 * LICORES             20.5
 	 * ...
 	 */
-	Map<Categoria, Double> getEstadisticaPrecioMedioProductosPorCategoria();
+	Map<String, Double> getEstadisticaPrecioMedioProductosPorCategoria();
 
 /*
  * 
