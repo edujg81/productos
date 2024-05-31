@@ -19,4 +19,6 @@ public interface EstablecimientoServices {
 	
 	List<Establecimiento> getAll();
 	
+	/* Aquí se declaran los métodos que se van a implementar en 
+	 * EstablecimientoServicesImpl.java */
 }
